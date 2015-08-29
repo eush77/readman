@@ -4,7 +4,8 @@
 var help = require('help-version')(usage()).help,
     readmeFilenames = require('readme-filenames'),
     readmeToManPage = require('readme-to-man-page'),
-    manPager = require('man-pager');
+    manPager = require('man-pager'),
+    npmExpansion = require('npm-expansion');
 
 var path = require('path'),
     fs = require('fs');
@@ -32,7 +33,7 @@ function usage () {
         var manPage = readmeToManPage(readme, {
           name: name,
           section: 'npm',
-          manual: 'Node Package Manager'
+          manual: npmExpansion()
         });
 
         manPager().end(manPage);
