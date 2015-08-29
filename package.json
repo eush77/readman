@@ -1,0 +1,44 @@
+{
+  "name": "readman",
+  "version": "0.0.0",
+  "description": "Display local package readme as a man page",
+  "author": "Eugene Sharygin <eush77@gmail.com>",
+  "license": "MIT",
+  "preferGlobal": true,
+  "bin": "cli.js",
+  "files": [
+    "cli.js"
+  ],
+  "homepage": "https://github.com/eush77/readman",
+  "repository": "eush77/readman",
+  "bugs": {
+    "url": "https://github.com/eush77/readman/issues"
+  },
+  "keywords": [
+    "cli",
+    "dependency",
+    "development",
+    "docs",
+    "less",
+    "local",
+    "man",
+    "manual",
+    "module",
+    "more",
+    "npm",
+    "package",
+    "pager",
+    "readme",
+    "require",
+    "resolve",
+    "unix",
+    "viewer"
+  ],
+  "dependencies": {
+    "help-version": "^1.0.0",
+    "man-pager": "^1.0.0",
+    "readme-filenames": "^1.0.0",
+    "readme-to-man-page": "^0.5.0"
+  },
+  "devDependencies": {}
+}
