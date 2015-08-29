@@ -16,6 +16,11 @@ function usage () {
 }
 
 
+function error (err) {
+  console.error(err.toString());
+}
+
+
 (function main (argv) {
   if (argv.length > 1) {
     return help(1);
@@ -24,14 +29,16 @@ function usage () {
   var name = argv[0];
 
   if (name) {
-    readmeForPackage(argv[0], function (err, readmePath) {
+    readmeForPackage(argv[0], function (err, pkg, readmePath) {
       if (err) return error(err);
 
       fs.readFile(readmePath, 'utf8', function (err, readme) {
         if (err) return error(err);
 
         var manPage = readmeToManPage(readme, {
-          name: name,
+          name: pkg.name,
+          version: pkg.version,
+          description: pkg.description,
           section: 'npm',
           manual: npmExpansion()
         });
@@ -41,8 +48,3 @@ function usage () {
     });
   }
 }(process.argv.slice(2)));
-
-
-function error (err) {
-  console.error(err.toString());
-}
