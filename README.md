@@ -13,6 +13,27 @@ Like [readme], but renders readme into a full-fledged man page.
 [david]: https://david-dm.org/eush77/readman
 [david-badge]: https://david-dm.org/eush77/readman.png
 
+## Usage
+
+Display readme for installed package:
+
+```
+$ npm install express
+$ readman express
+```
+
+Display readme for package at current working directory:
+
+```
+$ readman
+```
+
+Display readme for global package:
+
+```
+$ readman -g npm
+```
+
 ## CLI
 
 #### `$ readman [--global | -g] [<module>]`
