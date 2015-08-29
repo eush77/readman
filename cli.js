@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 'use strict';
 
-var readmeForPackage = require('./lib/readme-for-package');
-
 var help = require('help-version')(usage()).help,
     readmeToManPage = require('readme-to-man-page'),
+    readmeFilenames = require('readme-filenames'),
     manPager = require('man-pager'),
-    npmExpansion = require('npm-expansion');
+    npmExpansion = require('npm-expansion'),
+    findRoot = require('find-root');
 
-var fs = require('fs');
+var fs = require('fs'),
+    path = require('path');
 
 
 function usage () {
@@ -17,7 +18,7 @@ function usage () {
 
 
 function error (err) {
-  console.error(err.toString());
+  if (err) console.error(err.toString());
 }
 
 
@@ -27,24 +28,68 @@ function error (err) {
   }
 
   var name = argv[0];
+  var root;
 
   if (name) {
-    readmeForPackage(argv[0], function (err, pkg, readmePath) {
-      if (err) return error(err);
-
-      fs.readFile(readmePath, 'utf8', function (err, readme) {
-        if (err) return error(err);
-
-        var manPage = readmeToManPage(readme, {
-          name: pkg.name,
-          version: pkg.version,
-          description: pkg.description,
-          section: 'npm',
-          manual: npmExpansion()
-        });
-
-        manPager().end(manPage);
-      });
-    });
+    try {
+      root = rootForPackageName(name);
+    }
+    catch (err) {
+      return error(err);
+    }
   }
+  else {
+    try {
+      root = findRoot(process.cwd());
+    }
+    catch (err) {
+      root = process.cwd();
+    }
+  }
+
+  readReadme(root, error);
 }(process.argv.slice(2)));
+
+
+function rootForPackageName (name) {
+  // Clarify error message if package is missing.
+  require.resolve(name);
+
+  return path.dirname(require.resolve(path.join(name, 'package.json')));
+}
+
+
+function readReadme (root, cb) {
+  var pkg = require(path.join(root, 'package.json'));
+
+  fs.readdir(root, function (err, files) {
+    if (err) return cb(err);
+
+    var readmes = files.filter(function (filename) {
+      return readmeFilenames.indexOf(filename) >= 0;
+    });
+
+    if (readmes.length != 1) {
+      return error(Error('Readme not found.'));
+    }
+
+    displayReadme(pkg, path.join(root, readmes[0]), cb);
+  });
+}
+
+
+function displayReadme (pkg, readmePath, cb) {
+  fs.readFile(readmePath, 'utf8', function (err, readme) {
+    if (err) return cb(err);
+
+    var manPage = readmeToManPage(readme, {
+      name: pkg.name,
+      version: pkg.version,
+      description: pkg.description,
+      section: 'npm',
+      manual: npmExpansion()
+    });
+
+    manPager().end(manPage);
+  });
+}

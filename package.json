@@ -7,8 +7,7 @@
   "preferGlobal": true,
   "bin": "cli.js",
   "files": [
-    "cli.js",
-    "lib/"
+    "cli.js"
   ],
   "homepage": "https://github.com/eush77/readman",
   "repository": "eush77/readman",
@@ -36,6 +35,7 @@
     "viewer"
   ],
   "dependencies": {
+    "find-root": "^0.1.1",
     "help-version": "^1.0.0",
     "man-pager": "^1.0.0",
     "npm-expansion": "^1.0.0",
