@@ -45,6 +45,7 @@ function usage () {
 
 function readmeForPackage (name, cb) {
   try {
+    require.resolve(name);
     var root = path.dirname(require.resolve(path.join(name, 'package.json')));
   }
   catch (err) {
