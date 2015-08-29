@@ -1,6 +1,6 @@
 {
   "name": "readman",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Display local package readme as a man page",
   "author": "Eugene Sharygin <eush77@gmail.com>",
   "license": "MIT",
