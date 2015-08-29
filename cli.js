@@ -7,14 +7,16 @@ var help = require('help-version')(usage()).help,
     manPager = require('man-pager'),
     npmExpansion = require('npm-expansion'),
     findRoot = require('find-root'),
-    resolveFrom = require('resolve-from');
+    resolveFrom = require('resolve-from'),
+    minimist = require('minimist'),
+    rc = require('rc');
 
 var fs = require('fs'),
     path = require('path');
 
 
 function usage () {
-  return 'Usage:  readman [<module>]';
+  return 'Usage:  readman [--global | -g] [<module>]';
 }
 
 
@@ -23,7 +25,20 @@ function error (err) {
 }
 
 
-(function main (argv) {
+var opts = minimist(process.argv.slice(2), {
+  boolean: ['global'],
+  alias: {
+    global: 'g'
+  },
+  unknown: function (arg) {
+    if (arg[0] == '-') {
+      return help(1);
+    }
+  }
+});
+
+
+(function main (opts, argv) {
   if (argv.length > 1) {
     return help(1);
   }
@@ -33,13 +48,17 @@ function error (err) {
 
   if (name) {
     try {
-      root = rootForPackageName(name);
+      root = rootForPackageName(name, opts.global);
     }
     catch (err) {
       return error(err);
     }
   }
   else {
+    if (opts.global) {
+      return error(Error('--global expects an explicit module name.'));
+    }
+
     try {
       root = findRoot(process.cwd());
     }
@@ -49,15 +68,17 @@ function error (err) {
   }
 
   readReadme(root, error);
-}(process.argv.slice(2)));
+}(opts, opts._));
 
 
-function resolve (name) {
-  return resolveFrom(process.cwd(), name);
-}
+function rootForPackageName (name, global) {
+  var basedir = (global
+                 ? path.join((rc('npm', null, []).prefix
+                              || path.resolve(process.execPath, '../..')),
+                             'lib')
+                 : process.cwd());
+  var resolve = resolveFrom.bind(null, basedir);
 
-
-function rootForPackageName (name) {
   // Clarify error message if package is missing.
   resolve(name);
 

@@ -15,9 +15,11 @@ Like [readme], but renders readme into a full-fledged man page.
 
 ## CLI
 
-#### `$ readman [<module>]`
+#### `$ readman [--global | -g] [<module>]`
 
 Displays man page for `<module>` (requiring it through the usual Node `require.resolve` algorithm) or for module at the current directory (stepping up into parent directories if needed).
+
+With `-g` flag, module name is resolved globally instead of locally.
 
 ## Related
 
