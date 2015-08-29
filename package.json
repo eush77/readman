@@ -40,7 +40,8 @@
     "man-pager": "^1.0.0",
     "npm-expansion": "^1.0.0",
     "readme-filenames": "^1.0.0",
-    "readme-to-man-page": "^0.5.0"
+    "readme-to-man-page": "^0.5.0",
+    "resolve-from": "^1.0.0"
   },
   "devDependencies": {}
 }

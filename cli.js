@@ -6,7 +6,8 @@ var help = require('help-version')(usage()).help,
     readmeFilenames = require('readme-filenames'),
     manPager = require('man-pager'),
     npmExpansion = require('npm-expansion'),
-    findRoot = require('find-root');
+    findRoot = require('find-root'),
+    resolveFrom = require('resolve-from');
 
 var fs = require('fs'),
     path = require('path');
@@ -51,11 +52,16 @@ function error (err) {
 }(process.argv.slice(2)));
 
 
+function resolve (name) {
+  return resolveFrom(process.cwd(), name);
+}
+
+
 function rootForPackageName (name) {
   // Clarify error message if package is missing.
-  require.resolve(name);
+  resolve(name);
 
-  return path.dirname(require.resolve(path.join(name, 'package.json')));
+  return path.dirname(resolve(path.join(name, 'package.json')));
 }
 
 
