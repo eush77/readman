@@ -25,10 +25,10 @@ function usage () {
 
   if (name) {
     readmeForPackage(argv[0], function (err, readmePath) {
-      if (err) throw err;
+      if (err) return error(err);
 
       fs.readFile(readmePath, 'utf8', function (err, readme) {
-        if (err) throw err;
+        if (err) return error(err);
 
         var manPage = readmeToManPage(readme, {
           name: name,
@@ -44,7 +44,12 @@ function usage () {
 
 
 function readmeForPackage (name, cb) {
-  var root = path.dirname(require.resolve(path.join(name, 'package.json')));
+  try {
+    var root = path.dirname(require.resolve(path.join(name, 'package.json')));
+  }
+  catch (err) {
+    return cb(err);
+  }
 
   fs.readdir(root, function (err, files) {
     if (err) return cb(err);
@@ -59,4 +64,9 @@ function readmeForPackage (name, cb) {
 
     cb(null, path.join(root, readmes[0]));
   });
+}
+
+
+function error (err) {
+  console.error(err.toString());
 }
