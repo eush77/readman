@@ -60,7 +60,11 @@ function rootForPackageName (name) {
 
 
 function readReadme (root, cb) {
-  var pkg = require(path.join(root, 'package.json'));
+  var pkg;
+  try {
+    pkg = require(path.join(root, 'package.json'));
+  }
+  catch (err) {}
 
   fs.readdir(root, function (err, files) {
     if (err) return cb(err);
@@ -82,12 +86,14 @@ function displayReadme (pkg, readmePath, cb) {
   fs.readFile(readmePath, 'utf8', function (err, readme) {
     if (err) return cb(err);
 
-    var manPage = readmeToManPage(readme, {
+    var manPage = readmeToManPage(readme, pkg ? {
       name: pkg.name,
       version: pkg.version,
       description: pkg.description,
       section: 'npm',
       manual: npmExpansion()
+    } : {
+      name: path.basename(process.cwd())
     });
 
     manPager().end(manPage);
