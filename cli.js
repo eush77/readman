@@ -9,7 +9,7 @@ var help = require('help-version')(usage()).help,
     findRoot = require('find-root'),
     resolveFrom = require('resolve-from'),
     minimist = require('minimist'),
-    rc = require('rc');
+    npmPrefix = require('npm-prefix');
 
 var fs = require('fs'),
     path = require('path');
@@ -72,11 +72,7 @@ var opts = minimist(process.argv.slice(2), {
 
 
 function rootForPackageName (name, global) {
-  var basedir = (global
-                 ? path.join((rc('npm', null, []).prefix
-                              || path.resolve(process.execPath, '../..')),
-                             'lib')
-                 : process.cwd());
+  var basedir = global ? path.join(npmPrefix(), 'lib') : process.cwd();
   var resolve = resolveFrom.bind(null, basedir);
 
   // Clarify error message if package is missing.
