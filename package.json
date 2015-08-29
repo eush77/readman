@@ -7,7 +7,8 @@
   "preferGlobal": true,
   "bin": "cli.js",
   "files": [
-    "cli.js"
+    "cli.js",
+    "lib/"
   ],
   "homepage": "https://github.com/eush77/readman",
   "repository": "eush77/readman",
