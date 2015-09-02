@@ -42,6 +42,10 @@ Displays man page for `<module>` (requiring it through the usual Node `require.r
 
 With `-g` flag, module name is resolved globally instead of locally.
 
+## Completions
+
+Get completions for your shell from `completions` directory in this repo.
+
 ## Related
 
 `readman` is basically a hybrid of these two packages:
